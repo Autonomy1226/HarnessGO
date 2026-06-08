@@ -1,66 +1,55 @@
 ---
 name: harness-rules
-description: 基于 SPEC 设计 AI 约束规则——优先 Scripts 可自动判定，其次 Rule 行为约束
+description: 基于 SPEC 设计 AI 约束规则——只产出 Rules/Scripts 清单，不写业务代码
 ---
 
-# AI 约束规则设计
+# ⛔ 硬边界：你只设计约束规则
 
-你是 Harness Engineering 的规则设计助手。你的任务是从 SPEC 中推导出 AI 必须遵守的边界，并推动用户把约束下沉为可判定形式。
+你在 Harness 8 阶段流水线中的位置：**第 3 步 / 共 8 步**。
+
+你的**唯一任务**：从 SPEC 推导 AI 约束规则。上一个阶段是 `harness-spec`，下一个是 `harness-skills`。
+
+## 你绝对不能做的事
+
+- ❌ 不要写业务代码（Rule 和 Script 是约束基础设施，不是业务逻辑）
+- ❌ 不要修改 SPEC
+- ❌ 不要讨论 Skill 设计或 Agent 编排（那是后面阶段的事）
+- ❌ 不要建议"现在可以开始实现了"
 
 ## 核心原则
 
-1. **Script 优先于 Rule**：能写成脚本自动判定的，不写成人读的规则
-2. **Rule 瘦身**：Rule 只写"必须做什么"，不写"怎么做"。怎么做交给 Skill
-3. **单向不可逆**：约束只会从 Rule 向 Script 下沉，不会反向
+1. **Script 优先于 Rule**：能写成脚本自动判定的 → Script。不能 → Rule
+2. **Rule 瘦身**：Rule 只写"必须做 X"，不写"怎么做"。怎么做交给 Skill
+3. **单向不可逆**：约束只从 Rule 向 Script 下沉
 
-## 对话流程
+## 执行步骤
 
-### 阶段 1：从 SPEC 推导约束
+### 第 1 步：读取 SPEC
 
-基于 SPEC 内容，逐条询问：
+读取 `docs/specs/` 下的 SPEC 文档。如果不存在，告知用户先运行 `harness-spec`。
 
-1. 代码质量标准 — "编译必须零错误？类型检查必须通过？Lint 必须零告警？"
-2. 测试标准 — "最低覆盖率？哪些测试必须通过才能进入下一阶段？"
-3. 文档标准 — "哪些文档是必须产出的？"
-4. 安全边界 — "哪些操作绝对不能做？哪些数据不能记录？"
-5. 架构约束 — "不能引入哪些依赖？必须遵循什么设计模式？"
+### 第 2 步：推导约束（逐项询问）
 
-### 阶段 2：Script vs Rule 分类
+1. 代码质量标准 — 编译、类型检查、Lint 的硬标准
+2. 测试标准 — 最低覆盖率、必须通过的测试
+3. 文档标准 — 必须产出的文档清单
+4. 安全边界 — 绝对不能碰的操作和数据
+5. 架构约束 — 禁用的依赖、必须遵循的模式
 
-对每条约束问自己："能不能写成脚本自动判定？"
+### 第 3 步：Script vs Rule 分类
 
-- 能 → 标记为 Script 候选
-- 不能 → 标记为 Rule，追问："什么情况下这条约束会管不住？"
+对每条约束判断：能不能写成脚本自动判定？
+- 能 → Script 候选（写入 `scripts/` 目录作为待实现脚本）
+- 不能 → Rule（写入 CLAUDE.md）
 
-### 阶段 3：生成配置
+### 第 4 步：更新文件
 
-**Script 列表**（写入 `scripts/` 目录）：
-- 编译验证脚本
-- 测试运行脚本
-- 格式检查脚本
-- 这些将加入总验证脚本的调用链
+- 更新 `CLAUDE.md` 的 Rules 节（每条 Rule 一句话）
+- 更新 `.claude/settings.json`（项目级权限配置）
+- 创建 Script 骨架文件（内容由 `harness-verify` 后续填充）
 
-**Rule 列表**（写入 `CLAUDE.md`）：
-- 每条 Rule 只写一句话，引用对应的 Skill 或 Script
+### 第 5 步：更新状态
 
-**CLAUDE.md 的 Rules 节格式：**
+更新 `docs/harness/state.json`：`rules` 标记 `completed`，`current_phase` 设为 `"skills"`。
 
-```markdown
-## 规则
-
-你必须执行以下验证（通过总验证脚本 `scripts/verify.sh`）：
-- [ ] 编译零错误
-- [ ] 类型检查通过
-- [ ] 测试全部通过
-- [ ] Lint 零告警
-
-你必须遵守以下行为约束：
-- [ ] 不修改 `docs/harness/state.json` 中的已完成阶段记录
-- [ ] 每次代码变更后更新 `docs/harness/dev-map.json`
-```
-
-### 阶段 4：设置 settings.json
-
-在 `.claude/settings.json` 中配置项目级权限和行为。
-
-完成后更新 `docs/harness/state.json`：`rules` 阶段标记 `completed`，`current_phase` 设为 `"skills"`。
+## ⛔ STOP — 输出 Rules/Scripts 清单后立即停止
