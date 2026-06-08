@@ -6,6 +6,7 @@ description: 建立验证体系——编译、测试、API 端点验证全部必
 # ⛔ 硬边界：不留占位符。有后端就必须验证 API 端点。
 
 你在 Harness 8 阶段流水线中的位置：**第 7 步 / 共 8 步**。
+上一个阶段是 `harness-stabilize`，下一个是 `harness-map`。
 
 ## ⚠️ 最重要的规则
 
