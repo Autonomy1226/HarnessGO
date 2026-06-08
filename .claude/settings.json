@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ls:*)",
+      "Bash(cp:*)",
+      "Bash(mkdir:*)",
+      "Bash(chmod:*)",
+      "Bash(bash scripts/verify.sh:*)",
+      "Read(*)",
+      "Write(*.md)",
+      "Write(*.json)",
+      "Edit(*.md)",
+      "Edit(*.json)",
+      "Glob(*)",
+      "Grep(*)"
+    ]
+  }
+}

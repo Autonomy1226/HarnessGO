@@ -1,0 +1,17 @@
+{
+  "version": "1.0",
+  "project": "Harness Engineering Tool",
+  "current_phase": "verify",
+  "phases": {
+    "init":      { "status": "completed",  "started_at": "2026-06-08", "completed_at": "2026-06-08", "artifacts": ["docs/harness/state.json", "docs/harness/", "scripts/", ".claude/skills/harness/"], "blocked_by": [] },
+    "spec":      { "status": "completed",  "started_at": "2026-06-08", "completed_at": "2026-06-08", "artifacts": ["docs/specs/2026-06-08-harness-engineering-tool-design.md"], "blocked_by": [] },
+    "rules":     { "status": "completed",  "started_at": "2026-06-08", "completed_at": "2026-06-08", "artifacts": [".claude/skills/harness/harness-rules.md", ".claude/settings.json"], "blocked_by": [] },
+    "skills":    { "status": "completed",  "started_at": "2026-06-08", "completed_at": "2026-06-08", "artifacts": [".claude/skills/harness/harness-skills.md"], "blocked_by": [] },
+    "agents":    { "status": "completed",  "started_at": "2026-06-08", "completed_at": "2026-06-08", "artifacts": ["docs/superpowers/specs/2026-06-08-harness-engineering-tool-design.md", "templates/agent-design-template.md"], "blocked_by": [] },
+    "stabilize": { "status": "completed",  "started_at": "2026-06-08", "completed_at": "2026-06-08", "artifacts": [".claude/skills/harness/harness-stabilize.md"], "blocked_by": [] },
+    "verify":    { "status": "in_progress","started_at": "2026-06-08", "completed_at": null, "artifacts": ["scripts/verify.sh"], "blocked_by": [] },
+    "map":       { "status": "pending",    "started_at": null, "completed_at": null, "artifacts": [], "blocked_by": [] }
+  },
+  "knowledge_base_active": false,
+  "evolution_log": []
+}

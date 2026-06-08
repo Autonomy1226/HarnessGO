@@ -1,0 +1,17 @@
+{
+  "version": "1.0",
+  "project": "",
+  "current_phase": "init",
+  "phases": {
+    "init":      { "status": "pending", "started_at": null, "completed_at": null, "artifacts": [], "blocked_by": [] },
+    "spec":      { "status": "pending", "started_at": null, "completed_at": null, "artifacts": [], "blocked_by": [] },
+    "rules":     { "status": "pending", "started_at": null, "completed_at": null, "artifacts": [], "blocked_by": [] },
+    "skills":    { "status": "pending", "started_at": null, "completed_at": null, "artifacts": [], "blocked_by": [] },
+    "agents":    { "status": "pending", "started_at": null, "completed_at": null, "artifacts": [], "blocked_by": [] },
+    "stabilize": { "status": "pending", "started_at": null, "completed_at": null, "artifacts": [], "blocked_by": [] },
+    "verify":    { "status": "pending", "started_at": null, "completed_at": null, "artifacts": [], "blocked_by": [] },
+    "map":       { "status": "pending", "started_at": null, "completed_at": null, "artifacts": [], "blocked_by": [] }
+  },
+  "knowledge_base_active": false,
+  "evolution_log": []
+}
