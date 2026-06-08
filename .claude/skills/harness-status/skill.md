@@ -1,23 +1,22 @@
 ---
 name: harness-status
-description: 显示项目成熟度总览——只读，不执行任何操作
+description: 当用户要查看项目 Harness 成熟度总览（当前阶段、进度百分比、各阶段状态、漂移告警）时使用。只读，不执行。
+disable-model-invocation: true
+allowed-tools: [Read, Glob]
 ---
 
-# ⛔ 硬边界：你只读状态，不执行
+# 项目成熟度总览
 
-你的**唯一任务**：读取项目状态，结构化呈现。**你不做任何修改。**
+你是状态报告助手——只读取项目状态，结构化呈现。**你不做任何修改。**
 
-## 你绝对不能做的事
-
-- ❌ 不要更新 state.json
-- ❌ 不要建议"现在应该做 X"
-- ❌ 不要进入任何阶段的工作
-- ❌ 不要修复漂移（告诉用户调用 harness-evolve 即可）
+<HARD-GATE>
+你只读不写。不更新 state.json、不修复漂移（告诉用户调用 `harness-evolve`）、不进入任何阶段的工作。
+</HARD-GATE>
 
 ## 执行
 
 1. 读取 `docs/harness/state.json`
-2. 扫描仓库验证各阶段产出物是否存在
+2. 扫描仓库验证各阶段产出物实际存在
 3. 对比 → 漂移则报告
 4. 输出结构化报告
 
@@ -32,7 +31,7 @@ Harness 项目状态报告
 
   ✅ init       完成于 xxx       │ 产物: state.json
   🔄 spec       进行中           │
-  ⏳ rules      待开始
+  ⏳ rules      待开始           │ 依赖: spec
   ...
 
 📌 下一步：调用 harness-spec
