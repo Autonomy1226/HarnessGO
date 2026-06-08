@@ -1,8 +1,7 @@
 #!/bin/bash
-# Harness 总验证脚本 — 5 步固定序列
+# Harness 总验证脚本 — 5 步固定序列 + API 端点验证
 # 由 harness-verify 根据项目技术栈自动填充
 # 用法：bash scripts/verify.sh
-# 输出：每步 [PASS/FAIL] + 详细原因
 # 退出码：0 = 全部通过，非 0 = 存在失败项
 
 set -e
@@ -36,14 +35,7 @@ fi
 # 2. 编译检查 — TO BE FILLED BY harness-verify
 # ═══════════════════════════════════════════════════════════════
 echo "--- 2/5 编译检查 ---"
-# >>> HARNESS-VERIFY: 根据技术栈替换下方占位符 <<<
-# 示例（Python 后端）：
-#   pip install -r requirements.txt && mypy backend/ --strict && npm run build
-# 示例（纯前端）：
-#   npm ci && npm run build
-# 示例（Go）：
-#   go build ./...
-# ⚠️  此占位符必须被替换为实际编译命令，否则验证脚本无效。
+# >>> HARNESS-VERIFY: 替换下方为实际编译命令 <<<
 echo "  [FAIL] 编译检查 — 编译命令未配置。请运行 harness-verify 填充 scripts/verify.sh"
 EXIT_CODE=1
 REPORT="${REPORT}[FAIL] 编译检查 - 编译命令未配置\n"
@@ -52,20 +44,31 @@ REPORT="${REPORT}[FAIL] 编译检查 - 编译命令未配置\n"
 # 3. 测试检查 — TO BE FILLED BY harness-verify
 # ═══════════════════════════════════════════════════════════════
 echo "--- 3/5 测试检查 ---"
-# >>> HARNESS-VERIFY: 根据技术栈替换下方占位符 <<<
-# 示例（Python 后端 + 前端）：
-#   pytest backend/ -v --cov=backend --cov-report=term && npm test -- --coverage
-# 示例（纯前端）：
-#   npm test -- --coverage
-# 示例（Go）：
-#   go test ./... -v -cover
-# ⚠️  此占位符必须被替换为实际测试命令，否则验证脚本无效。
+# >>> HARNESS-VERIFY: 替换下方为实际测试命令 <<<
 echo "  [FAIL] 测试检查 — 测试命令未配置。请运行 harness-verify 填充 scripts/verify.sh"
 EXIT_CODE=1
 REPORT="${REPORT}[FAIL] 测试检查 - 测试命令未配置\n"
 
 # ═══════════════════════════════════════════════════════════════
-# 4. 规则文件同步 — 自动检查关键配置文件存在性和一致性
+# 3.5. API 端点验证 — TO BE FILLED BY harness-verify
+# ═══════════════════════════════════════════════════════════════
+echo "--- 3.5/5 API 端点验证 ---"
+if [ -f "docs/design/api-spec.md" ]; then
+  # >>> HARNESS-VERIFY: 替换下方为逐端点的 curl 验证 <<<
+  # 步骤：
+  #   1. 启动后端（例如: python backend/main.py &）记录 PID
+  #   2. 等待服务就绪（例如: sleep 2 + curl health check）
+  #   3. 对 api-spec.md 中每个端点执行 curl，检查预期状态码和响应格式
+  #   4. kill PID 停止后端
+  echo "  [FAIL] API 端点验证 — 验证命令未配置。请运行 harness-verify 填充 scripts/verify.sh"
+  EXIT_CODE=1
+  REPORT="${REPORT}[FAIL] API 端点验证 - 验证命令未配置\n"
+else
+  echo "  [SKIP] API 端点验证 — 无后端 API（docs/design/api-spec.md 不存在）"
+fi
+
+# ═══════════════════════════════════════════════════════════════
+# 4. 规则文件同步 — 自动检查
 # ═══════════════════════════════════════════════════════════════
 echo "--- 4/5 规则同步 ---"
 if [ -f "CLAUDE.md" ]; then
@@ -80,7 +83,7 @@ else
 fi
 
 # ═══════════════════════════════════════════════════════════════
-# 5. 工程文件完整性 — 自动检查强制文档和产物
+# 5. 工程文件完整性 — 自动检查
 # ═══════════════════════════════════════════════════════════════
 echo "--- 5/5 工程完整性 ---"
 REQUIRED_DOCS=(
