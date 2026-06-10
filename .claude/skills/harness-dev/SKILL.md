@@ -7,7 +7,7 @@ allowed-tools: [Bash, Read, Write, Edit, Glob, Grep]
 
 # 开发实现
 
-你是开发实现 Agent。你的任务不是自己写全部代码——而是**读取 `docs/design/design.md` 的模块拆分方案，然后给每个模块 Agent 派发对应的 `docs/design/modules/{name}.md`，各自独立施工，最后集成验证。**
+你是开发实现 Agent。你的任务不是自己写全部代码——而是**读取 `docs/design/design.md` 的模块拆分方案，然后给每个模块 Agent 派发对应的 `docs/design/dev/[front或backend]/[name].md`，各自独立施工，最后集成验证。**
 
 <HARD-GATE>
 你不自己写代码。你根据 design.md §1.6 的模块列表拆分任务，用 parallel() 派发独立模块 Agent，最后检查集成结果。上一个阶段是 `harness-gate`，下一个是 `harness-review`。
@@ -17,9 +17,9 @@ allowed-tools: [Bash, Read, Write, Edit, Glob, Grep]
 
 你是**开发调度者（Dev Orchestrator）**，不是写代码的工程师。
 
-你的价值在于：**把设计方案中的模块列表拆成并行任务——每个模块 Agent 只读自己那份 `modules/{name}.md`，不需要任何额外信息就能写出正确代码。**
+你的价值在于：**把设计方案中的模块列表拆成并行任务——每个模块 Agent 只读自己那份 `dev/[front或backend]/[name].md`，不需要任何额外信息就能写出正确代码。**
 
-你自己不写代码。你的核心技能是：读 design.md 了解全景 → 拆出并行任务 → 给每个 Agent 指定对应的 `modules/{name}.md` → 集成验证。
+你自己不写代码。你的核心技能是：读 design.md 了解全景 → 拆出并行任务 → 给每个 Agent 指定对应的 `dev/[front或backend]/[name].md` → 集成验证。
 
 ## ⚠️ 铁律
 
@@ -43,7 +43,10 @@ allowed-tools: [Bash, Read, Write, Edit, Glob, Grep]
 
 ### 第 1 步：读取施工图纸
 
-读取 `docs/design/design.md` §1.6（模块拆分方案）和 `docs/design/api-spec.md`。确认每个模块对应的 `docs/design/modules/{name}.md`。
+读取 `docs/design/dev/` 文件夹。**这是你的唯一信息源——不读 design.md，不读 gate/，不读 test/。**
+
+- `docs/design/dev/front/*.md` — 前端各模块施工文档
+- `docs/design/dev/backend/*.md` — 后端各模块施工文档
 
 ### 第 2 步：确认模块拆分粒度
 
@@ -52,7 +55,7 @@ allowed-tools: [Bash, Read, Write, Edit, Glob, Grep]
 ```
 📐 模块列表（来自 design.md §1.6）：
 
-  模块 1: 后端 API — 8 个文件 — modules/backend.md
+  模块 1: 后端 API — 8 个文件 — docs/design/dev/backend/api.md
   模块 2: 前端组件 — 4 个文件 — modules/frontend.md
 
 每个模块默认 1 个 Agent。如果有模块文件过多，可以进一步拆分。
@@ -63,18 +66,18 @@ allowed-tools: [Bash, Read, Write, Edit, Glob, Grep]
 
 ```
 后端模块拆为 3 个 Agent：
-  models Agent   — modules/backend.md 中 models/ 下的文件定义
-  routes Agent   — modules/backend.md 中 routes/ 下的文件定义  
-  services Agent — modules/backend.md 中 services/ 下的文件定义
+  models Agent   — docs/design/dev/backend/api.md 中 models/ 下的文件定义
+  routes Agent   — docs/design/dev/backend/api.md 中 routes/ 下的文件定义  
+  services Agent — docs/design/dev/backend/api.md 中 services/ 下的文件定义
 ```
 
-每个 Agent 只读 `modules/backend.md` 中自己负责的那部分。不把整个文件塞给每个 Agent。
+每个 Agent 只读 `docs/design/dev/backend/api.md` 中自己负责的那部分。不把整个文件塞给每个 Agent。
 
 ### 第 3 步：并行派发模块 Agent
 
 使用 `parallel()` 派发所有 Agent。每个 Agent 的 prompt 必须包含：
 - 只负责的文件路径（精确到每个文件）
-- 从 `modules/{name}.md` 中提取的对应函数签名和接口定义
+- 从 `dev/[front或backend]/[name].md` 中提取的对应函数签名和接口定义
 - 对其他模块的接口约定（输入/输出格式）
 - 禁止做的事（不碰其他文件、不自己发明 API）
 
@@ -82,11 +85,11 @@ allowed-tools: [Bash, Read, Write, Edit, Glob, Grep]
 phase('开发实现');
 const modules = await parallel([
   () => agent(
-    `你是 [模块名] Agent。严格按照 docs/design/modules/[name].md 实现。
+    `你是 [模块名] Agent。严格按照 docs/design/dev/[front或backend]/[name].md 实现。
 
     这份文件定义了你需要创建的每个文件、每个函数签名、每个接口约定。
     函数签名、接口路径、字段名必须精确匹配。
-    不写其他模块的代码。不添加模块文档之外的接口。`,
+    不写其他模块的代码。不添加文档之外的接口。`,
 
     { label: '[模块名]-Agent', phase: '开发实现' }
   ),
@@ -103,12 +106,11 @@ phase('集成检查');
 const integration = await agent(
   `你是集成检查 Agent。只验证，不修复。
 
-  1. 逐条对照 design.md §1.6 的跨模块接口约定：
-     - 模块 A 提供的接口是否实际存在？
-     - 模块 B 调用的参数格式是否与 A 提供的匹配？
-  2. 逐条对照 api-spec.md：
-     - 每个端点是否实际实现了？
-     - HTTP 方法和路径是否精确匹配？
+  1. 逐条对照 dev 文件夹中前后端各自的接口约定：
+     - `docs/design/dev/backend/api.md` 中定义的端点是否实际存在？
+     - `docs/design/dev/front/*.md` 中声明的 API 调用是否与后端匹配？
+  2. 跨模块接口双向一致性：
+     - 后端提供的接口 = 前端期望的接口（路径、方法、参数名、响应格式）
 
   全部匹配 → "✅ 集成检查通过"
   任何不匹配 → "⛔ 集成检查失败" + 具体冲突项`,
@@ -160,13 +162,13 @@ if (integration && integration.includes('失败')) {
 **你和你派发的模块 Agent 只读设计文档，不读 SPEC。** SPEC 是需求文档——需求分析 Agent 读它写 SPEC，方案设计 Agent 读 SPEC 写设计。你是开发——你只读设计文档。
 
 你的**唯一信息源**：
-- `docs/design/design.md`（§1.6 模块拆分方案）— 了解全景
-- `docs/design/modules/{name}.md` — 每个模块 Agent 只读自己那份
+- `docs/design/dev/front/*.md` — 前端模块 Agent 各自只读自己那份
+- `docs/design/dev/backend/*.md` — 后端模块 Agent 各自只读自己那份
 
-每个模块 Agent 的 prompt 中引用的是**设计文档中的定义**，不是 SPEC ID：
+每个模块 Agent 的 prompt 中引用的是**设计文档中的定义**：
 
 ```
-你是后端 API Agent。严格按照 docs/design/modules/backend.md 实现。
+你是后端 API Agent。严格按照 docs/design/dev/backend/api.md 实现。
 这份文档定义了你需要创建的每个文件、每个函数签名、每个接口约定。
 
 你不得实现这份文档之外的任何接口。如果你认为需要额外接口，报告给我而不是自己添加。
@@ -192,7 +194,7 @@ if (failures.length > 0) {
 ## 自检（派发前）
 
 - [ ] 每个模块 Agent prompt 是否精确到函数签名
-- [ ] 每个 prompt 是否引用了对应的 `docs/design/modules/{name}.md`
+- [ ] 每个 prompt 是否引用了对应的 `docs/design/dev/[front或backend]/[name].md`
 - [ ] 每个 prompt 是否包含「禁止实现的接口」清单
 - [ ] 模块间依赖顺序是否正确（被依赖的先跑）
 
@@ -208,7 +210,7 @@ if (failures.length > 0) {
 - [ ] 所有模块 Agent 执行完成（失败模块已记录）
 - [ ] 每个模块有 `docs/dev/{module}-dev-log.md`
 - [ ] `docs/dev/dev-report.md` 已生成（含模块执行结果 + 集成检查结果）
-- [ ] 集成检查逐条对照 design.md §1.6 通过
+- [ ] 集成检查逐条对照 dev 文件夹中的跨模块接口约定通过
 - [ ] `docs/harness/dev-map.json` 已更新
 
 **以下行为视为越界：**

@@ -27,7 +27,7 @@ allowed-tools: [Read, Bash, Glob, Grep]
 不能只看代码质量。必须逐条检查：FR-001 有没有对应实现、FR-002 有没有对应实现...遗漏任何一条 → 阻塞。
 
 ### 铁律 2：必须对照 api-spec 逐端点核对
-路径、方法、参数名、响应字段名——必须与 api-spec.md 精确匹配。一个字符不对 → 严重问题。
+路径、方法、参数名、响应字段名——必须与 `docs/design/dev/backend/api.md` 精确匹配。一个字符不对 → 严重问题。
 
 ### 铁律 3：阻塞项必须回退
 🔴 阻塞 = 必须回退到开发阶段。不能让它带着阻塞项进入测试——测试 Agent 不应该测已知有问题的代码。
@@ -59,12 +59,12 @@ allowed-tools: [Read, Bash, Glob, Grep]
 
 ### 维度 3：方案一致性
 
-对照 `docs/design/design.md` §1.6 和 `docs/design/api-spec.md`：
+对照 `docs/design/dev/` 和 `docs/design/gate/`：
 
-- [ ] 实际代码结构是否与设计方案一致
-- [ ] API 端点路径、方法、参数、响应是否与 api-spec.md 精确匹配
-- [ ] 模块间接口调用是否与 design.md §1.6 的跨模块约定一致
-- [ ] 技术选型是否与 ADR 一致
+- [ ] 实际代码结构是否与 dev/ 中的施工文档一致
+- [ ] API 端点路径、方法、参数、响应是否与 `docs/design/dev/backend/api.md` 精确匹配
+- [ ] 模块间接口调用是否与 dev/ 中前后端各自的接口约定一致
+- [ ] 技术选型是否与 gate/feasibility-brief.md 一致
 
 ## 输出
 
@@ -84,9 +84,9 @@ allowed-tools: [Read, Bash, Glob, Grep]
 
 ```
 需求一致性审查（对照 design.md §1.4.1 追溯矩阵）：
-  FR-001 ✅ GET /api/projects/:id/tasks 已实现，响应格式与 api-spec.md 一致
+  FR-001 ✅ GET /api/projects/:id/tasks 已实现，响应格式与 `docs/design/dev/backend/api.md` 一致
   FR-002 ✅ POST /api/projects/:id/tasks 已实现，参数校验完整
-  FR-003 🔴 POST /api/tasks/:id/comments 请求参数名与 api-spec.md 不一致
+  FR-003 🔴 POST /api/tasks/:id/comments 请求参数名与 `docs/design/dev/backend/api.md` 不一致
         （代码: comment，api-spec: content）
   FR-004 ❌ 未找到对应实现
 ```
@@ -94,8 +94,8 @@ allowed-tools: [Read, Bash, Glob, Grep]
 ## 自检
 
 - [ ] design.md 追溯矩阵每条 FR 已逐条核对
-- [ ] api-spec.md 每个端点已逐端点核对
-- [ ] design.md §1.6 跨模块接口已逐条核对
+- [ ] `docs/design/dev/backend/api.md` 每个端点已逐端点核对
+- [ ] dev/ 文件夹中跨模块接口已逐条核对
 - [ ] 每个 🔴 阻塞项有明确的修复方向
 - [ ] Non-goals 已确认为未涉及
 

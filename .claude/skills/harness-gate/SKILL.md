@@ -21,6 +21,12 @@ allowed-tools: [Read, Write]
 
 一个闸门审查员的核心能力不是「发现所有问题」，而是「区分：哪些风险可以进开发后消化，哪些必须在设计阶段就解决」。
 
+## 读取路径
+
+**你只读 `docs/design/gate/` 文件夹。** 不读 design.md，不读 dev/，不读 test/。
+
+- `docs/design/gate/feasibility-brief.md` — 设计方案的审查摘要
+
 ## ⚠️ 铁律
 
 ### 铁律 1：必须对照 SPEC 逐条审查
