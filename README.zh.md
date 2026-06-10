@@ -1,8 +1,8 @@
 # Harness Engineering
 
-**7 个专业 AI Agent，把模糊想法变成可交付代码。**
+**7 个专业 Claude Code Skill，把模糊想法变成可交付代码。**
 
-不是代码生成工具——是一套工程化流水线。每个 Agent 有明确的专业身份、硬边界、铁律和自检清单。
+不是代码生成工具——是一套工程化流水线。每个 Skill 有明确的专业角色、硬边界、铁律和自检清单。
 
 ## 项目概述
 
@@ -44,7 +44,7 @@ SPEC（需求文档）
   ↓ 被 gate、dev、review、test 读取
 ```
 
-下游 Agent 不读 SPEC——只读设计方案。每个 Agent 有自己的信息边界。
+下游 Skill 不读 SPEC——只读设计方案。每个 Skill 有自己的信息边界。
 
 ---
 
@@ -67,7 +67,7 @@ your-project/
     spec-template.md
     dev-map.json
     task-board.json
-    agent-design-template.md
+    design-template.md
     module-spec-template.md
     verify-template.sh
 ```
@@ -90,9 +90,9 @@ harness-test       生成 verify.sh → 运行 → 逐条 AC 验收
 
 ---
 
-## 7 个 Agent
+## 7 个 Skill
 
-| Agent | 专业身份 | 核心产出 |
+| Skill | 专业角色 | 核心产出 |
 |-------|---------|---------|
 | `harness` | 工程项目经理 | state.json、dev-map、task-board |
 | `harness-spec` | 产品需求分析师 | SPEC（PRD，含术语表、ID 体系、假设记录） |
@@ -104,9 +104,9 @@ harness-test       生成 verify.sh → 运行 → 逐条 AC 验收
 
 ---
 
-## 每个 Agent 的质量框架
+## 每个 Skill 的质量框架
 
-所有 Agent 统一遵循 7 层质量框架：
+所有 Skill 统一遵循 7 层质量框架：
 
 | 层 | 内容 |
 |----|------|
@@ -163,7 +163,7 @@ Harness Engineering 自身是一个 Harness 项目，通过 `scripts/verify.sh` 
 ## 文件结构
 
 ```
-.claude/skills/           # 7 个 Agent（SKILL.md）
+.claude/skills/           # 7 个 Skill（SKILL.md）
 templates/                # 模板（SPEC、state、dev-map、task-board、module-spec、verify）
 docs/superpowers/
   specs/                  # 设计规格

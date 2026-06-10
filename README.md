@@ -1,8 +1,8 @@
 # Harness Engineering
 
-**7 specialized AI Agents that turn vague ideas into deliverable code.**
+**7 specialized Claude Code Skills that turn vague ideas into deliverable code.**
 
-Not a code generator — an engineering pipeline. Each agent has a clear professional identity, hard boundaries, iron rules, and self-check checklists.
+Not a code generator — an engineering pipeline. Each Skill has a clear professional role, hard boundaries, iron rules, and self-check checklists.
 
 ---
 
@@ -49,7 +49,7 @@ Copy `.claude/skills/` and `templates/` to your project:
 
 ```
 your-project/
-  .claude/skills/       # 7 agent skill files
+  .claude/skills/       # 7 Skill files
   templates/            # Templates (spec, state, dev-map, etc.)
 ```
 
@@ -67,9 +67,9 @@ harness-test       Generate verify.sh → run → AC-by-AC acceptance
 
 ---
 
-## 7 Agents
+## 7 Skills
 
-| Agent | Identity | Core Output |
+| Skill | Role | Core Output |
 |-------|----------|-------------|
 | `harness` | Engineering PM | state.json, dev-map, task-board |
 | `harness-spec` | Product Requirement Analyst | SPEC (PRD with glossary, ID system, assumptions) |
@@ -83,7 +83,7 @@ harness-test       Generate verify.sh → run → AC-by-AC acceptance
 
 ## Quality Framework
 
-Every agent follows a 7-layer quality framework:
+Every Skill follows a 7-layer quality framework:
 
 | Layer | Content |
 |-------|---------|
@@ -133,7 +133,7 @@ Harness Engineering is itself a Harness project, validated by its own `scripts/v
 ## File Structure
 
 ```
-.claude/skills/           # 7 agents (SKILL.md + SKILL.en.md)
+.claude/skills/           # 7 Skills (SKILL.md + SKILL.en.md)
 templates/                # Templates (spec, state, dev-map, task-board, module-spec, verify)
 docs/superpowers/
   specs/                  # Design specs
