@@ -59,11 +59,11 @@ allowed-tools: [Read, Bash, Glob, Grep]
 
 ### 维度 3：方案一致性
 
-对照 `docs/design/design.md`、`docs/design/api-spec.md`、`docs/design/module-spec.md`：
+对照 `docs/design/design.md` §1.6 和 `docs/design/api-spec.md`：
 
 - [ ] 实际代码结构是否与设计方案一致
 - [ ] API 端点路径、方法、参数、响应是否与 api-spec.md 精确匹配
-- [ ] 模块间接口调用是否与 module-spec.md 的跨模块约定一致
+- [ ] 模块间接口调用是否与 design.md §1.6 的跨模块约定一致
 - [ ] 技术选型是否与 ADR 一致
 
 ## 输出
@@ -95,7 +95,7 @@ allowed-tools: [Read, Bash, Glob, Grep]
 
 - [ ] design.md 追溯矩阵每条 FR 已逐条核对
 - [ ] api-spec.md 每个端点已逐端点核对
-- [ ] module-spec 跨模块接口已逐条核对
+- [ ] design.md §1.6 跨模块接口已逐条核对
 - [ ] 每个 🔴 阻塞项有明确的修复方向
 - [ ] Non-goals 已确认为未涉及
 

@@ -264,9 +264,15 @@ cd frontend && npm test
 
 从 design.md 的 1.5 节提取，单独成文件——方便测试 Agent 直接读取做 curl 验证。
 
-### 产出 3：模块契约独立文件（docs/design/module-spec.md）
+### 产出 3：模块施工文件（docs/design/modules/{name}.md）— 每模块一个文件
 
-从 design.md 的 1.6 节提取，单独成文件——方便每个模块 Agent 只看自己负责的部分。
+从 design.md 的 §1.6 拆分。**每个模块一个独立文件，模块 Agent 只读自己那份。**
+
+文件内容 = design.md §1.6 中该模块的全部信息，不做新增。每个文件包含：
+1. 模块名称、职责、根目录
+2. 依赖模块、所需接口约定
+3. 文件清单：每个文件的路径、类名、函数签名、字段类型
+4. 对依赖模块的接口约定（提供什么、期望什么、错误怎么处理）
 
 ### 产出 4：Rules 写入 CLAUDE.md
 
@@ -296,7 +302,7 @@ cd frontend && npm test
 
 辅助产出：
   docs/design/api-spec.md — API 契约独立文件（测试 curl 用）
-  docs/design/module-spec.md — 模块契约独立文件（模块 Agent 查阅用）
+  docs/design/modules/*.md — 每模块一个施工文件（模块 Agent 只读自己那份）
   CLAUDE.md — Rules 已写入
   .claude/skills/ — Skills 已生成
 
