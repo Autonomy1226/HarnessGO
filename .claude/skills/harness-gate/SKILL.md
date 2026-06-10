@@ -71,7 +71,7 @@ allowed-tools: [Read, Write]
 
 ## ⚠️ 重要
 
-报告写入 `docs/design/feasibility-review.md`。
+报告写入 `docs/design/gate/feasibility-review.md`。
 
 末尾留出**人工审批区域**：
 ```
@@ -90,7 +90,7 @@ allowed-tools: [Read, Write]
 
 ## SPEC ID 追溯
 
-审查报告 `docs/design/feasibility-review.md` 中，每项检查必须引用 SPEC ID：
+审查报告 `docs/design/gate/feasibility-review.md` 中，每项检查必须引用 SPEC ID：
 
 ```
 范围检查：
