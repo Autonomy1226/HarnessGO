@@ -1,5 +1,9 @@
 # Harness Engineering
 
+[English](README.md) | [中文](README.zh.md)
+
+---
+
 **一套结构化的 Claude Code 工程流水线。7 个 Skill 引导你从模糊想法走到可验证交付——每一步都可追溯。**
 
 不是代码生成器。每个 Skill 锁定一个工程阶段：需求被追问到无歧义，设计精确到函数签名，代码按契约实现，验证全部脚本化——不靠主观判断。

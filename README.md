@@ -1,5 +1,9 @@
 # Harness Engineering
 
+[English](README.md) | [中文](README.zh.md)
+
+---
+
 **A structured engineering pipeline for Claude Code. 7 Skills guide you from a rough idea to a verified, deliverable codebase — with traceability at every step.**
 
 Not a code generator. Each Skill enforces a specific phase of work: requirements are questioned until they're unambiguous, designs are precise to function signatures, code is written to contract, and verification is scripted — not subjective.
