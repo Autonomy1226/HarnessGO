@@ -45,13 +45,38 @@ allowed-tools: [Bash, Read, Write, Edit, Glob, Grep]
 
 读取 `docs/design/design.md` §1.6（模块拆分方案）和 `docs/design/api-spec.md`。确认每个模块对应的 `docs/design/modules/{name}.md`。
 
-### 第 2 步：并行派发模块 Agent
+### 第 2 步：确认模块拆分粒度
 
-使用 `parallel()` 同时派发所有模块 Agent。每个模块 Agent 的 prompt 必须包含：
-- 只负责的文件路径
-- 必须实现的函数签名和接口
+先向用户展示模块清单：
+
+```
+📐 模块列表（来自 design.md §1.6）：
+
+  模块 1: 后端 API — 8 个文件 — modules/backend.md
+  模块 2: 前端组件 — 4 个文件 — modules/frontend.md
+
+每个模块默认 1 个 Agent。如果有模块文件过多，可以进一步拆分。
+是否调整拆分粒度？
+```
+
+**如果一个模块需要拆成多个 Agent**（例如后端 8 个文件太吃力），按功能分组：
+
+```
+后端模块拆为 3 个 Agent：
+  models Agent   — modules/backend.md 中 models/ 下的文件定义
+  routes Agent   — modules/backend.md 中 routes/ 下的文件定义  
+  services Agent — modules/backend.md 中 services/ 下的文件定义
+```
+
+每个 Agent 只读 `modules/backend.md` 中自己负责的那部分。不把整个文件塞给每个 Agent。
+
+### 第 3 步：并行派发模块 Agent
+
+使用 `parallel()` 派发所有 Agent。每个 Agent 的 prompt 必须包含：
+- 只负责的文件路径（精确到每个文件）
+- 从 `modules/{name}.md` 中提取的对应函数签名和接口定义
 - 对其他模块的接口约定（输入/输出格式）
-- 禁止做的事（不碰其他模块文件、不自己发明 API）
+- 禁止做的事（不碰其他文件、不自己发明 API）
 
 ```javascript
 phase('开发实现');
