@@ -1,176 +1,146 @@
 # Harness Engineering
 
-**7 个专业 AI Agent，把模糊想法变成可交付代码。**
+**7 specialized AI Agents that turn vague ideas into deliverable code.**
 
-不是代码生成工具——是一套工程化流水线。每个 Agent 有明确的专业身份、硬边界、铁律和自检清单。
-
-## 项目概述
-
-Harness Engineering 项目创建工具 — 一组 Claude Code Skill，引导用户通过 AI-Native 工程方法论创建 AI-Ready 项目仓库。覆盖四层架构：约束与流程、反馈、知识库、进化。
-
+Not a code generator — an engineering pipeline. Each agent has a clear professional identity, hard boundaries, iron rules, and self-check checklists.
 
 ---
 
-## 流水线
+## Pipeline
 
 ```
-用户模糊想法
+Vague idea
     │
- ① harness (PM)         项目经理 — 初始化、路由、进度、知识库
+ ① harness (PM)         Project Manager — init, routing, progress, knowledge base
     │
- ② harness-spec         需求分析 — 深挖用户意图 → 带 ID 追溯体系的 PRD
+ ② harness-spec         Requirement Analyst — deep-dive user intent → traceable PRD
     │
- ③ harness-design       方案设计 — SPEC → 完整技术方案（dev Agent 唯一施工依据）
+ ③ harness-design       Solution Architect — SPEC → complete technical blueprint
     │
- ④ harness-gate         闸门总控 — 开发前最后把关（AI 审查 + 人签字）
+ ④ harness-gate         Gate Reviewer — final feasibility & risk check (AI review + human sign-off)
     │
- ⑤ harness-dev          开发调度 — 按模块契约并行派发模块 Agent，集成检查
+ ⑤ harness-dev          Dev Orchestrator — dispatches parallel module agents per blueprint
     │
- ⑥ harness-review       代码审查 — 实现质量 + 需求一致性 + 方案一致性 三维收口
+ ⑥ harness-review       Code Reviewer — quality + requirement alignment + design alignment
     │
- ⑦ harness-test         测试验证 — 生成 verify.sh + 逐条 AC 验收 + 补稳
+ ⑦ harness-test         Test Engineer — verify.sh + AC-by-AC validation + stabilization
     │
- ✅ 交付
+ ✅ Delivery
 ```
 
 ---
 
-## 文档依赖链
+## Document Chain
 
 ```
-SPEC（需求文档）
-  ↓ 只被 harness-design 读取
-设计方案（design.md + api-spec.md + modules/*.md）
-  ↓ 被 gate、dev、review、test 读取
+SPEC (requirements doc)
+  ↓ read only by harness-design
+Design docs (design.md + dev/ + gate/ + test/)
+  ↓ read by gate, dev, review, test
 ```
 
-下游 Agent 不读 SPEC——只读设计方案。每个 Agent 有自己的信息边界。
+Downstream agents never read SPEC — only design docs. Each agent has its own information boundary.
 
 ---
 
-## 安装
+## Quick Start
 
-将 `.claude/skills/` 和 `templates/` 拷贝到目标项目：
+Copy `.claude/skills/` and `templates/` to your project:
 
 ```
 your-project/
-  .claude/skills/
-    harness/SKILL.md
-    harness-spec/SKILL.md
-    harness-design/SKILL.md
-    harness-gate/SKILL.md
-    harness-dev/SKILL.md
-    harness-review/SKILL.md
-    harness-test/SKILL.md
-  templates/
-    state.json
-    spec-template.md
-    dev-map.json
-    task-board.json
-    agent-design-template.md
-    module-spec-template.md
-    verify-template.sh
+  .claude/skills/       # 7 agent skill files
+  templates/            # Templates (spec, state, dev-map, etc.)
+```
+
+Then invoke in Claude Code:
+
+```
+harness            PM — init skeleton + view progress
+harness-spec       Write SPEC with FR/AC/NFR ID traceability
+harness-design     Produce design.md + api-spec + modules + gate/test briefs
+harness-gate       Feasibility review (AI review + human approval)
+harness-dev        Dispatch parallel module agents to write code
+harness-review     3D review (quality + requirements + design consistency)
+harness-test       Generate verify.sh → run → AC-by-AC acceptance
 ```
 
 ---
 
-## 使用
+## 7 Agents
 
-在项目目录下打开 Claude Code，依次调用：
+| Agent | Identity | Core Output |
+|-------|----------|-------------|
+| `harness` | Engineering PM | state.json, dev-map, task-board |
+| `harness-spec` | Product Requirement Analyst | SPEC (PRD with glossary, ID system, assumptions) |
+| `harness-design` | Solution Architect | design.md + api-spec + modules + gate/test briefs |
+| `harness-gate` | Gate Reviewer | feasibility-review.md (AI review + human approval) |
+| `harness-dev` | Dev Orchestrator | Code + dev-report + dev-log + dev-map |
+| `harness-review` | Code Reviewer | review-report.md (🔴🟡🔵 three-level review) |
+| `harness-test` | Test & Verification Engineer | verify.sh + test-report + stabilization rules |
+
+---
+
+## Quality Framework
+
+Every agent follows a 7-layer quality framework:
+
+| Layer | Content |
+|-------|---------|
+| ① Professional Identity | Who I am, what value I bring |
+| ② Iron Rules | Non-negotiable constraints |
+| ③ ID Traceability | Every conclusion traceable to upstream docs |
+| ④ Self-Check | Mandatory checks before output |
+| ⑤ Prohibitions | What I must never do |
+| ⑥ Completion Standards | Verifiable item-by-item |
+| ⑦ STOP Boundary | Stop when done, don't overstep |
+
+---
+
+## Core Design Principles
+
+### One-way document flow
+
+SPEC → Design → Dev/Review/Test. Downstream never reads upstream directly.
+
+### Rules = principle constraints, Skills = process execution
+
+Rule (one sentence): "After every change: compile, test, post-verify. All three must pass."
+Skill spells out each step: how to compile, how to test, how to verify. AI doesn't interpret — it invokes a proven method.
+
+### verify.sh is the unified judge
+
+`scripts/verify.sh` — 5-step fixed sequence. Pass = deliverable. Fail = blocked. No placeholders.
+
+### dev-map is a navigation map
+
+Not a file list. Answers: feature landing points, service access, config locations, impact chains, standard patterns, no-go zones. Whoever changes code updates the map.
+
+---
+
+## Project Status
+
+Harness Engineering is itself a Harness project, validated by its own `scripts/verify.sh`:
 
 ```
-harness            PM 初始化骨架 + 查看进度
-harness-spec       需求分析，产出 SPEC（带 FR/AC/NFR ID 追溯）
-harness-design     方案设计，产出 design.md + api-spec.md + modules/*.md
-harness-gate       闸门审查（可跳过，直接确认通过）
-harness-dev        并行派发模块 Agent 写代码
-harness-review     三维审查（质量 + 需求一致性 + 方案一致性）
-harness-test       生成 verify.sh → 运行 → 逐条 AC 验收
-```
-
----
-
-## 7 个 Agent
-
-| Agent | 专业身份 | 核心产出 |
-|-------|---------|---------|
-| `harness` | 工程项目经理 | state.json、dev-map、task-board |
-| `harness-spec` | 产品需求分析师 | SPEC（PRD，含术语表、ID 体系、假设记录） |
-| `harness-design` | 技术架构师 | design.md + api-spec.md + modules/*.md |
-| `harness-gate` | 闸门审查员 | feasibility-review.md（AI 审查 + 人审批） |
-| `harness-dev` | 开发调度者 | 代码 + dev-report.md + dev-log + dev-map |
-| `harness-review` | 代码审查员 | review-report.md（🔴🟡🔵 三级评审） |
-| `harness-test` | 测试验证工程师 | verify.sh + test-report.md + 补稳规则 |
-
----
-
-## 每个 Agent 的质量框架
-
-所有 Agent 统一遵循 7 层质量框架：
-
-| 层 | 内容 |
-|----|------|
-| ① 专业身份声明 | 我是谁、我的价值是什么 |
-| ② 铁律 | 不可违反的硬规则 |
-| ③ ID 追溯 | 每个结论可追溯到上游文档 |
-| ④ 自检清单 | 输出前必查 |
-| ⑤ 禁止行为 | 绝对不能做的事 |
-| ⑥ 完成标准 | 逐条可验证 |
-| ⑦ STOP 硬边界 | 做完就停，不越界 |
-
----
-
-## 核心设计原则
-
-### 文档单向流动
-
-SPEC → Design → Dev/Review/Test。下游不越级读上游文档。
-
-### Rule 做原则约束，Skill 做流程执行
-
-Rule 一句话：「改完必须编译、测试、事后验证。三步全过才算完成。」
-Skill 把每一步写清楚：怎么编、怎么测、怎么验。AI 不是理解——是调用一套现成方法。
-
-### 总验证脚本是统一裁判
-
-`scripts/verify.sh`——5 步固定序列。通过 = 可交付，不通过 = 不得进入下一阶段。不留占位符。
-
-### dev-map 是开发导航图
-
-不是文件列表。回答：功能落点、服务接入、配置位置、影响链路、标准写法、禁区。谁动代码谁改地图。
-
----
-
-## 项目状态
-
-Harness Engineering 自身是一个 Harness 项目，通过 `scripts/verify.sh` 验证：
-
-```
-[PASS] SPEC 包含: 项目目标
-[PASS] SPEC 包含: 明确不做的事
-[PASS] SPEC 包含: 成功标准
-[PASS] SPEC 包含: 技术约束
-[PASS] CLAUDE.md 存在
-[PASS] .claude/settings.json 存在
-[PASS] 文件存在: README.md
-[PASS] 文件存在: docs/harness/state.json
-[PASS] 文件存在: docs/harness/dev-map.json
-[PASS] 文件存在: docs/harness/task-board.json
+[PASS] SPEC check
+[PASS] Rule sync
+[PASS] File completeness
 ```
 
 ---
 
-## 文件结构
+## File Structure
 
 ```
-.claude/skills/           # 7 个 Agent（SKILL.md）
-templates/                # 模板（SPEC、state、dev-map、task-board、module-spec、verify）
+.claude/skills/           # 7 agents (SKILL.md + SKILL.en.md)
+templates/                # Templates (spec, state, dev-map, task-board, module-spec, verify)
 docs/superpowers/
-  specs/                  # 设计规格
-  plans/                  # 实现计划
-docs/harness/             # 项目状态（state.json、dev-map.json、task-board.json）
-scripts/verify.sh         # 总验证脚本
-CLAUDE.md                 # AI 行为规则
+  specs/                  # Design specs
+  plans/                  # Implementation plans
+docs/harness/             # Project state (state.json, dev-map.json, task-board.json)
+scripts/verify.sh         # Unified verification script
+CLAUDE.md                 # AI behavior rules
 ```
 
 ---
