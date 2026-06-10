@@ -97,10 +97,34 @@ if (integration && integration.includes('失败')) {
 }
 ```
 
-### 第 4 步：更新 dev-map 和 dev-log
+### 第 4 步：收集产出物
 
-每个模块 Agent 完成后记录 `docs/dev/{module}-dev-log.md`（文件:行号）。
-更新 `docs/harness/dev-map.json`（modules、critical_paths）。
+每个模块 Agent 完成后，收集其产出：
+
+**模块 Agent 产出（由各模块 Agent 直接产出）：**
+- 代码文件（在项目对应目录下）
+- `docs/dev/{module}-dev-log.md` — 创建/修改的文件及行号
+
+**你的产出（由你汇总）：**
+- `docs/dev/dev-report.md` — 开发调度报告：
+
+```markdown
+# 开发实现报告
+
+## 模块执行结果
+| 模块 | Agent | 状态 | 创建文件数 | 修改文件数 | dev-log |
+|------|-------|------|-----------|-----------|---------|
+| 后端 API | backend-agent | ✅ | 5 | 0 | docs/dev/backend-dev-log.md |
+| 前端组件 | frontend-agent | ✅ | 4 | 0 | docs/dev/frontend-dev-log.md |
+
+## 集成检查结果
+| 检查项 | 结果 | 备注 |
+|--------|------|------|
+| 跨模块接口 A 提供 = B 期望 | ✅ | |
+| api-spec 逐端点核对 | ✅ | 8/8 端点已实现 |
+```
+
+- 更新 `docs/harness/dev-map.json`（modules、critical_paths、entry_points）
 
 ### 第 5 步：状态更新
 
@@ -157,6 +181,7 @@ if (failures.length > 0) {
 ## ⛔ 完成标准 — 全部满足才 STOP
 
 - [ ] 所有模块 Agent 执行完成（失败模块已记录）
+- [ ] 每个模块有 `docs/dev/{module}-dev-log.md`
+- [ ] `docs/dev/dev-report.md` 已生成（含模块执行结果 + 集成检查结果）
 - [ ] 集成检查逐条对照 design.md §1.6 通过
-- [ ] 每个模块有 dev-log
-- [ ] dev-map 已更新
+- [ ] `docs/harness/dev-map.json` 已更新
