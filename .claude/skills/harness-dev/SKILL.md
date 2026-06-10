@@ -210,3 +210,8 @@ if (failures.length > 0) {
 - [ ] `docs/dev/dev-report.md` 已生成（含模块执行结果 + 集成检查结果）
 - [ ] 集成检查逐条对照 design.md §1.6 通过
 - [ ] `docs/harness/dev-map.json` 已更新
+
+**以下行为视为越界：**
+- ❌ 不说「代码看起来没问题」——那是 review 的结论
+- ❌ 不做代码质量审查——那是 review 的活
+- ❌ 不运行测试——那是 test 的活

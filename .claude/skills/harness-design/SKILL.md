@@ -324,3 +324,8 @@ cd frontend && npm test
 **用户确认后才能更新 state.json。** 用户有修改意见 → 改。用户说过了 → state.json：design→completed，current_phase→"gate"。
 
 ## ⛔ STOP — 人工确认通过后立即停止
+
+**以下行为视为越界：**
+- ❌ 不说「方案可行，可以开始开发了」——那是 gate 的结论
+- ❌ 不做可行性评估和风险评估——那是 gate 的活
+- ❌ 不写任何代码——那是 dev 的活
