@@ -106,17 +106,21 @@ if (integration && integration.includes('失败')) {
 
 `docs/harness/state.json`：dev→completed，current_phase→"review"。
 
-## SPEC ID 追溯
+## 设计文档依赖
 
-每个模块 Agent 的 prompt 中，必须标注该模块负责的 SPEC 需求 ID：
+**你和你派发的模块 Agent 只读设计文档，不读 SPEC。** SPEC 是需求文档——需求分析 Agent 读它写 SPEC，方案设计 Agent 读 SPEC 写设计。你是开发——你只读设计文档。
+
+你的**唯一信息源**：
+- `docs/design/design.md`（§1.6 模块拆分方案）— 了解全景
+- `docs/design/modules/{name}.md` — 每个模块 Agent 只读自己那份
+
+每个模块 Agent 的 prompt 中引用的是**设计文档中的定义**，不是 SPEC ID：
 
 ```
-你是后端 API Agent。你负责实现的端点对应以下 SPEC 需求：
-  FR-001 (GET /api/projects/:id/tasks) — AC-001
-  FR-002 (POST /api/projects/:id/tasks) — AC-002
-  FR-003 (PUT /api/tasks/:id/comments) — AC-003
+你是后端 API Agent。严格按照 docs/design/modules/backend.md 实现。
+这份文档定义了你需要创建的每个文件、每个函数签名、每个接口约定。
 
-你不得实现以上之外的任何端点。如果你认为某个需求需要额外端点，报告给我，不自己添加。
+你不得实现这份文档之外的任何接口。如果你认为需要额外接口，报告给我而不是自己添加。
 ```
 
 ## 模块 Agent 失败处理
@@ -139,7 +143,7 @@ if (failures.length > 0) {
 ## 自检（派发前）
 
 - [ ] 每个模块 Agent prompt 是否精确到函数签名
-- [ ] 每个 prompt 是否标注了对应的 SPEC FR ID
+- [ ] 每个 prompt 是否引用了对应的 `docs/design/modules/{name}.md`
 - [ ] 每个 prompt 是否包含「禁止实现的接口」清单
 - [ ] 模块间依赖顺序是否正确（被依赖的先跑）
 

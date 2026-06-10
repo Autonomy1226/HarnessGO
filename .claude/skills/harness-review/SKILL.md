@@ -51,11 +51,11 @@ allowed-tools: [Read, Bash, Glob, Grep]
 
 ### 维度 2：需求一致性
 
-对照 SPEC 和 docs/requirements/requirements.md：
+对照 `docs/design/design.md` 的追溯矩阵（§1.4.1）：
 
-- [ ] 每个功能需求（FR）是否有对应的代码实现
-- [ ] 是否有 Non-goals 被意外实现
-- [ ] 用户故事对应的验收条件是否被覆盖
+- [ ] 追溯矩阵中每条 FR 是否有对应的代码实现
+- [ ] 追溯矩阵中每条 NG-xxx 是否确认未涉及
+- [ ] 设计文档定义的每个端点是否实际实现
 
 ### 维度 3：方案一致性
 
@@ -78,31 +78,31 @@ allowed-tools: [Read, Bash, Glob, Grep]
 
 报告末尾给出总评：✅ 通过 / ⚠️ 有条件通过 / ❌ 需修改。
 
-## SPEC ID 追溯
+## 设计文档对照
 
-审查报告必须逐条 FR 列出审查结论：
+审查报告基于 `docs/design/design.md` 的追溯矩阵逐条核对：
 
 ```
-需求一致性审查：
-  FR-001 ✅ GET /api/projects/:id/tasks 已实现，响应格式与 api-spec 一致
+需求一致性审查（对照 design.md §1.4.1 追溯矩阵）：
+  FR-001 ✅ GET /api/projects/:id/tasks 已实现，响应格式与 api-spec.md 一致
   FR-002 ✅ POST /api/projects/:id/tasks 已实现，参数校验完整
-  FR-003 🔴 POST /api/tasks/:id/comments 请求参数名与 api-spec 不一致
+  FR-003 🔴 POST /api/tasks/:id/comments 请求参数名与 api-spec.md 不一致
         （代码: comment，api-spec: content）
   FR-004 ❌ 未找到对应实现
 ```
 
 ## 自检
 
-- [ ] SPEC 每条 FR 已逐条核对
-- [ ] api-spec 每个端点已逐端点核对
+- [ ] design.md 追溯矩阵每条 FR 已逐条核对
+- [ ] api-spec.md 每个端点已逐端点核对
 - [ ] module-spec 跨模块接口已逐条核对
 - [ ] 每个 🔴 阻塞项有明确的修复方向
 - [ ] Non-goals 已确认为未涉及
 
 ## 禁止行为
 
-- ❌ 禁止不读 SPEC 就审查
-- ❌ 禁止不逐条 FR 核对
+- ❌ 禁止不读设计文档就审查
+- ❌ 禁止不逐条核对 design.md 追溯矩阵
 - ❌ 禁止自己修改代码
 - ❌ 禁止降低等级（明明是阻塞却标为严重）
 
