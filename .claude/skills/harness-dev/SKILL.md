@@ -41,37 +41,30 @@ allowed-tools: [Bash, Read, Write, Edit, Glob, Grep]
 
 ## 执行步骤
 
-### 第 1 步：读取施工图纸
+### 第 1 步：读取全部施工图纸
 
-读取 `docs/design/dev/` 文件夹。**这是你的唯一信息源——不读 design.md，不读 gate/，不读 test/。**
+读取 `docs/design/dev/` 文件夹下的**所有文件**。不看 design.md、不看 gate/、不看 test/。
 
-- `docs/design/dev/front/*.md` — 前端各模块施工文档
-- `docs/design/dev/backend/*.md` — 后端各模块施工文档
+- `docs/design/dev/front/*.md` — 所有前端模块
+- `docs/design/dev/backend/*.md` — 所有后端模块
 
-### 第 2 步：确认模块拆分粒度
+**你做前后端全部模块，不做选择。** 不问「做前端还是后端」——两个都做。
 
-先向用户展示模块清单：
+### 第 2 步：确认拆分粒度
 
-```
-📐 模块列表（来自 design.md §1.6）：
-
-  模块 1: 后端 API — 8 个文件 — docs/design/dev/backend/api.md
-  模块 2: 前端组件 — 4 个文件 — modules/frontend.md
-
-每个模块默认 1 个 Agent。如果有模块文件过多，可以进一步拆分。
-是否调整拆分粒度？
-```
-
-**如果一个模块需要拆成多个 Agent**（例如后端 8 个文件太吃力），按功能分组：
+展示所有模块清单：
 
 ```
-后端模块拆为 3 个 Agent：
-  models Agent   — docs/design/dev/backend/api.md 中 models/ 下的文件定义
-  routes Agent   — docs/design/dev/backend/api.md 中 routes/ 下的文件定义  
-  services Agent — docs/design/dev/backend/api.md 中 services/ 下的文件定义
+📐 全部模块（来自 docs/design/dev/）：
+
+  前端: [N] 个文件 — [列出]
+  后端: [N] 个文件 — [列出]
+
+每个文件默认 1 个 Agent。共 [N] 个 Agent 并行执行。
+如果某个文件过大需要拆成多个 Agent，告知我——否则直接执行。
 ```
 
-每个 Agent 只读 `docs/design/dev/backend/api.md` 中自己负责的那部分。不把整个文件塞给每个 Agent。
+**默认直接执行——不等用户确认。** 只有文件明显过大（单个文件定义超过 10 个端点或函数）才问用户是否拆分。
 
 ### 第 3 步：并行派发模块 Agent
 
@@ -214,6 +207,7 @@ if (failures.length > 0) {
 - [ ] `docs/harness/dev-map.json` 已更新
 
 **以下行为视为越界：**
+- ❌ 不问「做前端还是后端」——两个都做，这是你的职责
 - ❌ 不说「代码看起来没问题」——那是 review 的结论
 - ❌ 不做代码质量审查——那是 review 的活
 - ❌ 不运行测试——那是 test 的活
