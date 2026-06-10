@@ -83,7 +83,7 @@ allowed-tools: [Read, Bash, Glob, Grep]
 审查报告基于 `docs/design/design.md` 的追溯矩阵逐条核对：
 
 ```
-需求一致性审查（对照 design.md §1.4.1 追溯矩阵）：
+需求一致性审查（对照 gate/feasibility-brief.md SPEC 覆盖清单）：
   FR-001 ✅ GET /api/projects/:id/tasks 已实现，响应格式与 `docs/design/dev/backend/api.md` 一致
   FR-002 ✅ POST /api/projects/:id/tasks 已实现，参数校验完整
   FR-003 🔴 POST /api/tasks/:id/comments 请求参数名与 `docs/design/dev/backend/api.md` 不一致
@@ -93,7 +93,7 @@ allowed-tools: [Read, Bash, Glob, Grep]
 
 ## 自检
 
-- [ ] design.md 追溯矩阵每条 FR 已逐条核对
+- [ ] gate/feasibility-brief.md 追溯矩阵每条 FR 已逐条核对
 - [ ] `docs/design/dev/backend/api.md` 每个端点已逐端点核对
 - [ ] dev/ 文件夹中跨模块接口已逐条核对
 - [ ] 每个 🔴 阻塞项有明确的修复方向
@@ -102,7 +102,7 @@ allowed-tools: [Read, Bash, Glob, Grep]
 ## 禁止行为
 
 - ❌ 禁止不读设计文档就审查
-- ❌ 禁止不逐条核对 design.md 追溯矩阵
+- ❌ 禁止不逐条核对 gate/feasibility-brief.md 追溯矩阵
 - ❌ 禁止自己修改代码
 - ❌ 禁止降低等级（明明是阻塞却标为严重）
 

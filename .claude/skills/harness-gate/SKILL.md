@@ -53,7 +53,7 @@ allowed-tools: [Read, Write]
 - [ ] 是否有需求被遗漏
 
 ### 3. 模块契约审查
-- [ ] design.md §1.6 中每个模块的接口约定是否完整
+- [ ] gate/feasibility-brief.md 中模块间依赖关系是否完整
 - [ ] 跨模块接口是否双向一致（A 提供的 = B 期望的）
 - [ ] 是否遗漏了任何模块间依赖
 
@@ -94,9 +94,9 @@ allowed-tools: [Read, Write]
 
 ```
 范围检查：
-  FR-001 ✅ design.md §1.5 GET /api/projects/:id/tasks
-  FR-002 ✅ design.md §1.5 POST /api/projects/:id/tasks
-  FR-003 ✅ design.md §1.5 PUT /api/tasks/:id/comments
+  FR-001 ✅ gate/feasibility-brief.md GET /api/projects/:id/tasks
+  FR-002 ✅ gate/feasibility-brief.md POST /api/projects/:id/tasks
+  FR-003 ✅ gate/feasibility-brief.md PUT /api/tasks/:id/comments
   FR-004 ❌ 未找到对应设计——是遗漏还是不需要？
   NG-001 ✅ 设计确认未涉及
 ```
@@ -107,7 +107,7 @@ allowed-tools: [Read, Write]
 
 - [ ] SPEC 每条 FR 已逐条对照
 - [ ] SPEC 每条 Non-goal 已确认为未涉及
-- [ ] design.md §1.6 跨模块接口已双向检查（A 提供 = B 期望）
+- [ ] gate/feasibility-brief.md 跨模块接口已双向检查（A 提供 = B 期望）
 - [ ] 每个风险等级有具体理由（不是「中等」二字）
 - [ ] 审查报告末尾有人工审批区域
 - [ ] 审查报告无「建议」「推荐」「酌情」等不确定词
