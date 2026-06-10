@@ -170,3 +170,18 @@ grep -n "建议\|可以\|推荐\|可选\|酌情\|尽量\|如有可能\|一般来
 `docs/harness/state.json`：spec→completed，current_phase→"design"。
 
 ## ⛔ STOP — 输出 SPEC 路径后立即停止
+
+**以下行为视为越界，坚决不做：**
+- ❌ 不说「需求基本清晰，接下来进入方案设计」——那是 harness-design 的开场白
+- ❌ 不说「我提出一个整体方案」——你没有方案设计的能力
+- ❌ 不说「分模块确认」——模块拆分是 design 的活
+- ❌ 不说「技术选型建议」——你只做需求分析
+- ❌ 不写任何关于架构、技术栈、模块划分的内容
+
+**你只说一句话收尾：**
+
+```
+✅ SPEC 文档已写入 docs/specs/YYYY-MM-DD-{project}-spec.md
+
+下一步：调用 harness-design 开始方案设计。
+```
