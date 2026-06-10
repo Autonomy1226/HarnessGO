@@ -98,22 +98,64 @@ Agent
 
 ---
 
-### 产出 2：API 契约（docs/design/api-spec.md）⚠️ 必须逐端点定义
+### 产出 2：API 契约（docs/design/api-spec.md）⚠️ 从需求逐条推导，不是套模板
 
-如果有后端，**每个端点必须写清楚以下 6 项，缺一不可**：
+**API 契约不是拍脑袋列出来的。它是从 SPEC 的每个功能需求、每个用户场景逐条推导出来的。**
+
+#### 推导方法（强制按此流程）
+
+**第 1 步：遍历 SPEC 的每个功能需求**
+
+读取 SPEC 中「核心目标」和「目标用户与使用场景」两节。对每个功能需求问：
+- 这个功能是否需要前端和后端交互？
+- 如果需要，涉及哪些数据操作（增/删/改/查）？
+- 每个数据操作对应什么端点？
+
+**第 2 步：遍历 SPEC 的每个用户场景**
+
+读取 SPEC 中「目标用户与使用场景」表。对每个场景问：
+- 用户在页面上做了什么操作？
+- 这个操作触发了什么后端请求？
+- 请求需要什么参数？返回什么数据？
+
+**第 3 步：检查数据模型**
+
+你设计的数据模型中，每个实体是否需要对外暴露 CRUD？哪些字段可以公开？哪些需要权限控制？
+
+**第 4 步：汇总为 API 契约表**
+
+将以上推导出的所有端点列入表格，每个端点 6 项完整：
 
 | 方法 | 路径 | 功能 | 请求参数 | 成功响应 | 错误响应 |
 |------|------|------|----------|----------|----------|
-| GET | /api/agents | 获取 agent 列表 | `?project_id=int` | `{agents: [{id, name, phase, project_id, created_at}]}` | `404 {detail}` |
-| POST | /api/agents | 创建 agent | `{name: str, phase: str, project_id: int}` | `{id, created_at}` (201) | `400 {detail}`, `409 {detail}` |
-| GET | /api/agents/:id | 获取单个 | — | `{id, name, phase, project_id, created_at, artifacts: [...]}` | `404 {detail}` |
-| PUT | /api/agents/:id/notes | 更新备注 | `{note: str}` | `{updated_at}` | `400 {detail}`, `404 {detail}` |
-| GET | /api/agents/:id/notes | 备注历史 | — | `{notes: [{content, created_at}]}` | `404 {detail}` |
+
+**第 5 步：逐端点追溯**
+
+每个端点后面标注它来自 SPEC 的哪一条需求：
+
+```
+GET /api/agents — 来源: 核心目标 #1「Agent 看板展示」、场景「HR 查看项目下所有 Agent 状态」
+POST /api/agents — 来源: 核心目标 #2「手动添加 Agent」、场景「管理员录入新 Agent」
+PUT /api/agents/:id/notes — 来源: 核心目标 #3「备注管理」、场景「评审员给 Agent 添加备注」
+```
+
+**如果某个端点找不到对应的 SPEC 需求 → 删掉。你不是在猜需求，是在翻译需求。**
+
+#### 示例（仅供参考格式，内容取决于你的 SPEC）
+
+假设 SPEC 定义了「多 Agent 可视化看板，支持手动添加和备注管理」，推导结果可能是：
+
+| 方法 | 路径 | 功能 | 请求参数 | 成功响应 | 错误响应 | 来源 |
+|------|------|------|----------|----------|----------|------|
+| GET | /api/projects/:id/agents | 获取项目下所有 agent | `?phase=str`(可选) | `{agents: [...]}` | 404 | AC-1 看板展示 |
+| POST | /api/projects/:id/agents | 添加 agent | `{name, phase}` | 201 `{id, ...}` | 400, 404 | AC-2 手动添加 |
+| PUT | /api/agents/:id/notes | 更新备注 | `{note}` | `{updated_at}` | 400, 404 | AC-3 备注管理 |
+| GET | /api/agents/:id/notes | 备注历史 | — | `{notes: [...]}` | 404 | AC-3 备注管理 |
 
 **禁止**：
-- 「提供 CRUD 接口」← 模糊
-- 「返回 agent 信息」← 哪些字段？
-- 「支持分页」← 参数名？默认值？最大页？
+- 「提供 CRUD 接口」← 哪些 CRUD？哪个资源？
+- 「支持分页」← 参数名？默认值？
+- 没有来源标注的端点 ← 你在猜需求
 
 ---
 
