@@ -7,10 +7,6 @@ allowed-tools: [Read, Write, Glob]
 
 # 方案设计
 
-你是资深技术架构师（Solution Architect）。你的核心身份是**方案设计者**，不是需求分析师、不是开发工程师、不是测试工程师。
-
-你的唯一任务：**把 SPEC 翻译成一份开发 Agent 拿着就能施工、不会出错的技术方案。**
-
 <HARD-GATE>
 你只设计方案，不写业务代码。上一个阶段是 `harness-spec`，下一个是 `harness-gate`。
 </HARD-GATE>
@@ -271,71 +267,49 @@ docs/design/dev/
 
 ---
 
-## 最终人工审查（强制）⚠️
+## 产出后流程：先自检 → 再审查 → 再更新状态
 
-4 份文档 + Rules + Skills **全部产出后**，不要直接更新 state.json。先展示审查摘要：
+### 第 1 步：自检（自检不过不进入审查）
+
+- [ ] 禁止词扫描零输出
+- [ ] 追溯矩阵覆盖 SPEC 每一条 FR/NFR/AC/NG
+- [ ] design.md 含架构 + ADR + 数据模型
+- [ ] dev/front 和 dev/backend 每文件精确到函数签名
+- [ ] gate/feasibility-brief.md 含 SPEC 覆盖清单 + 风险摘要
+- [ ] test/test-brief.md 含 AC + API 端点 + NFR 验证清单
+- [ ] 跨模块接口双向一致
+- [ ] Rules 每条一句话，Skills 覆盖 4 项标准
+
+### 第 2 步：人工审查
+
+自检通过后，展示：
 
 ```
-📐 方案设计全部完成 — 请审查
+📐 方案设计完成 — 请审查
 
-核心产出：
-  docs/design/design.md        — 总方案（给人看的）
-  docs/design/dev/front/*.md   — 前端施工文档（给 dev 前端 Agent 看）
-  docs/design/dev/backend/*.md — 后端施工文档（给 dev 后端 Agent 看）
-  docs/design/gate/            — 闸门审查摘要（给 gate 看）
-  docs/design/test/            — 测试摘要（给 test 看）
-  CLAUDE.md                    — Rules 已写入
-  .claude/skills/              — Skills 已生成
+  docs/design/design.md        总方案
+  docs/design/dev/front/*.md   前端施工文档 ×[N]
+  docs/design/dev/backend/*.md 后端施工文档 ×[N]
+  docs/design/gate/            闸门审查摘要
+  docs/design/test/            测试摘要
+  CLAUDE.md                    Rules
+  .claude/skills/              Skills
 
-请逐项审查：
-  [ ] 技术选型是否覆盖全栈每层
-  [ ] 追溯矩阵是否覆盖 SPEC 每条 FR/NFR/AC/NG
-  [ ] dev/front 和 dev/backend 每个文件定义精确到函数签名
-  [ ] gate 审查摘要是否包含 SPEC 覆盖清单和风险评估
-  [ ] test 测试摘要是否包含 AC 清单、API 端点清单、NFR 验证清单
-  [ ] 前后端接口约定是否在各自的 dev 文件中一致
-  [ ] Rules 是否全是原则约束
-  [ ] Skills 是否覆盖编译/测试/事后验证/格式检查
-
-确认无误后，我将更新状态并交给闸门总控（harness-gate）。
+确认无误？确认后交给 harness-gate。
 ```
 
-**用户确认后才能更新 state.json。** 用户有修改意见 → 改。用户说过了 → state.json：design→completed，current_phase→"gate"。
-
-## 自检（全部产出后，人工审查前）
-
-- [ ] 禁止词扫描：`grep -n "建议\|可以\|推荐\|可选\|酌情\|尽量\|如有可能\|一般来说\|差不多" docs/design/*`
-- [ ] 追溯矩阵是否覆盖 SPEC 每一条 FR/NFR/AC/NG（无遗漏）
-- [ ] dev/front 和 dev/backend 每个文件定义精确到函数签名
-- [ ] gate/feasibility-brief.md 包含 SPEC 覆盖清单和风险评估
-- [ ] test/test-brief.md 包含 AC 清单、API 端点清单、NFR 验证清单
-- [ ] 跨模块接口双向一致性（前端期望 = 后端提供）
-- [ ] Rules 每条一句话，无流程细节
-- [ ] Skills 覆盖编译、测试、事后验证、格式检查
-
-自检未通过 → 不进入人工审查。修好再来。
+**用户确认后** → state.json：design→completed，current_phase→"gate"。
 
 ## 禁止行为
 
 - ❌ 不读 SPEC 就开始设计
-- ❌ 在产出物中使用不确定词语
-- ❌ 跨模块接口单向定义（A 写了 B 没写对应约定）
-- ❌ 数据模型出现 SPEC 中没有来源的实体
-- ❌ 漏掉 SPEC 任何一条 FR/NFR/AC/NG
+- ❌ 产出物中有不确定词语
+- ❌ 跨模块接口单向定义
+- ❌ 数据模型出现 SPEC 中无来源的实体
+- ❌ 漏 SPEC 任何一条 FR/NFR/AC/NG
 - ❌ 替 gate 做可行性评估
 
-## ⛔ 完成标准 — 全部满足才进入人工审查
-
-- [ ] design.md 包含系统架构 + ADR + 数据模型 + 追溯矩阵
-- [ ] dev/front/*.md 和 dev/backend/*.md 每文件精确到函数签名
-- [ ] gate/feasibility-brief.md 含 SPEC 覆盖清单 + 风险摘要
-- [ ] test/test-brief.md 含 AC + API 端点 + NFR 验证清单
-- [ ] Rules 已写入 CLAUDE.md
-- [ ] Skills SKILL.md 已生成
-- [ ] 自检全部通过
-- [ ] 人工审查清单已展示
-
-## ⛔ STOP — 人工确认通过后立即停止
+## ⛔ STOP
 
 **以下行为视为越界：**
 - ❌ 不说「方案可行，可以开始开发了」——那是 gate 的结论

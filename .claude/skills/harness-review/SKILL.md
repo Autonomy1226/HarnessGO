@@ -78,19 +78,6 @@ allowed-tools: [Read, Bash, Glob, Grep]
 
 报告末尾给出总评：✅ 通过 / ⚠️ 有条件通过 / ❌ 需修改。
 
-## 设计文档对照
-
-审查报告基于 `docs/design/design.md` 的追溯矩阵逐条核对：
-
-```
-需求一致性审查（对照 gate/feasibility-brief.md SPEC 覆盖清单）：
-  FR-001 ✅ GET /api/projects/:id/tasks 已实现，响应格式与 `docs/design/dev/backend/api.md` 一致
-  FR-002 ✅ POST /api/projects/:id/tasks 已实现，参数校验完整
-  FR-003 🔴 POST /api/tasks/:id/comments 请求参数名与 `docs/design/dev/backend/api.md` 不一致
-        （代码: comment，api-spec: content）
-  FR-004 ❌ 未找到对应实现
-```
-
 ## 自检
 
 - [ ] gate/feasibility-brief.md 追溯矩阵每条 FR 已逐条核对
